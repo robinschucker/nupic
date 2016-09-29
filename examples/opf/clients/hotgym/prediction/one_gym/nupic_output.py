@@ -69,7 +69,7 @@ class NuPICFileOutput(NuPICOutput):
     self.outputFiles = []
     self.outputWriters = []
     self.lineCounts = []
-    headerRow = ['timestamp', 'kw_energy_consumption', 'prediction']
+    headerRow = ['timestamp', 'kw_energy_consumption', 'prediction', 'prediction2']
     for name in self.names:
       self.lineCounts.append(0)
       outputFileName = "%s_out.csv" % name
@@ -90,11 +90,18 @@ class NuPICFileOutput(NuPICOutput):
     for index in range(len(self.names)):
       timestamp = timestamps[index]
       actual = actualValues[index]
-      prediction = predictedValues[index]
+      prediction = []
+      max_pred = 8
+      for i in range(1, max_pred + 1):
+      	prediction.append(predictedValues[index][i])
+      # prediction = predictedValues[index][1]
+      # prediction2 = predictedValues[index][2]
       writer = self.outputWriters[index]
 
       if timestamp is not None:
-        outputRow = [timestamp, actual, prediction]
+        outputRow = [timestamp, actual]
+        for i in range(0, max_pred):
+        	outputRow.append(prediction[i])
         writer.writerow(outputRow)
         self.lineCounts[index] += 1
 

@@ -44,11 +44,11 @@ DESCRIPTION = (
   "NOTE: You must run ./swarm.py before this, because model parameters\n"
   "are required to run NuPIC.\n"
 )
-GYM_NAME = "rec-center-hourly"  # or use "rec-center-every-15m-large"
+GYM_NAME = "df29"  # or use "rec-center-every-15m-large"
 DATA_DIR = "."
 MODEL_PARAMS_DIR = "./model_params"
 # '7/2/10 0:00'
-DATE_FORMAT = "%m/%d/%y %H:%M"
+DATE_FORMAT = "%Y-%m-%d %H:%M"
 
 _METRIC_SPECS = (
     MetricSpec(field='kw_energy_consumption', metric='multiStep',
@@ -124,8 +124,8 @@ def runIoThroughNupic(inputData, model, gymName, plot):
     if plot:
       result = shifter.shift(result)
 
-    prediction = result.inferences["multiStepBestPredictions"][1]
-    output.write([timestamp], [consumption], [prediction])
+    prediction = result.inferences["multiStepBestPredictions"]
+    output.write([timestamp], [consumption], [prediction]) # , [prediction], [prediction2]
 
     if plot and counter % 20 == 0:
         output.refreshGUI()
